@@ -2,8 +2,7 @@ package com.example.testwork
 import android.os.Bundle
 import android.os.SystemClock.sleep
 import android.util.Log
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import retrofit2.Call
@@ -21,11 +20,15 @@ class MainActivity : AppCompatActivity() {
     lateinit var valuteObj : Valute
     private val retrofitImpl: RetrofitImpl = RetrofitImpl()
     lateinit var swipeRefreshLayout : SwipeRefreshLayout
+    lateinit var editText :EditText
+    lateinit var spinner : Spinner
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         text = findViewById(R.id.text)
+        editText = findViewById(R.id.edit_text)
+        spinner = findViewById(R.id.spinner)
         swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout)
 
         val thred : Thread = Thread() {
@@ -83,7 +86,7 @@ class MainActivity : AppCompatActivity() {
             }
             else {
                 text.text = valuteObj.toString()
-
+                setSpinner()
             }
 
 
@@ -105,5 +108,32 @@ class MainActivity : AppCompatActivity() {
     override fun onSaveInstanceState(outState: Bundle) { // на случай уничтожения активности сохраним ключевую информацию
         super.onSaveInstanceState(outState)
         outState.putParcelable("valute", valuteObj) // текущий вопрос
+    }
+    fun setSpinner(){
+    val mainArray : Array<String?> = arrayOf(valuteObj.AUD.Name,
+            valuteObj.AZN.Name,
+            valuteObj.EUR.Name,
+            valuteObj.USD.Name,
+            valuteObj.GBP.Name,
+            valuteObj.BYN.Name,
+            valuteObj.BGN.Name,
+            valuteObj.BRL.Name,
+            valuteObj.HUF.Name,
+            valuteObj.HKD.Name,
+            valuteObj.DKK.Name,
+            valuteObj.INR.Name,
+            valuteObj.KZT.Name,
+            valuteObj.CAD.Name,
+            valuteObj.KGS.Name,
+            valuteObj.CNY.Name,
+            valuteObj.MDL.Name,
+            valuteObj.NOK.Name,
+            valuteObj.PLN.Name)
+        if (mainArray != null) {
+            val adapter: ArrayAdapter<String> = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, mainArray)
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            spinner.setAdapter(adapter)
+        }else
+            Log.d("Main", "Пустой массив")
     }
 }

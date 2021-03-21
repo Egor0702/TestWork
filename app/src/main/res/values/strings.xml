@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">TestWork</string>
+    <string name ="aus">Австралийский доллар</string>
 </resources>
