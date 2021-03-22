@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">TestWork</string>
     <string name ="aus">Австралийский доллар</string>
+    <string name="warning"> "Ошибка. Введите число"</string>
 </resources>
