@@ -22,6 +22,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var swipeRefreshLayout : SwipeRefreshLayout
     lateinit var editText :EditText
     lateinit var spinner : Spinner
+    lateinit var mapValute : MutableMap
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -110,6 +111,20 @@ class MainActivity : AppCompatActivity() {
         outState.putParcelable("valute", valuteObj) // текущий вопрос
     }
     fun setSpinner(){
+        mapValute = mutableOfMap()
+        mapValute.put(valuteObj.AUD.Name, valuteObj.AUD.Value)
+        mapValute.put(valuteObj.AZN.Name, valuteObj.AZN.Value)
+        mapValute.put(valuteObj.AZN.Name, valuteObj.AZN.Value)
+        mapValute.put(valuteObj.AUD.Name, valuteObj.AUD.Value)
+        mapValute.put(valuteObj.AZN.Name, valuteObj.AZN.Value)
+        mapValute.put(valuteObj.AZN.Name, valuteObj.AZN.Value)
+        //var set : MutableSet <String> = mutableSetOf<String>()
+    //set.add("one")
+    //set.add("two")
+    //var arr = arrayOfNulls<String>(set.size)
+    //var s : String = " "
+    //for( s in set)
+    //arr += s
     val mainArray : Array<String?> = arrayOf(valuteObj.AUD.Name,
             valuteObj.AZN.Name,
             valuteObj.EUR.Name,
