@@ -16,6 +16,7 @@ import java.util.concurrent.TimeUnit
 
 
 class MainActivity : AppCompatActivity() {
+    var result : String = ""
     lateinit var text: TextView
     lateinit var valuteObj : Valute
     private val retrofitImpl: RetrofitImpl = RetrofitImpl()
@@ -23,6 +24,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var editText :EditText
     lateinit var spinner : Spinner
     lateinit var mapValute : MutableMap
+    lateinit var setValute : MutableSet <String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,9 +49,21 @@ class MainActivity : AppCompatActivity() {
         swipeRefreshLayout.setColorSchemeResources(
                 android.R.color.black
         )
+        editText.setText("0")
+        spinner.setOnItemSelectedListener{
+            try{
+        var userValue = Integer.parseInt(editText.text)
+            }catch{Toast.makeText(this, "Ошибка. Введите число", Toast.LENGTH_LONG)}
+            var selected = spinner.getSelectedItem().toString()
+            var valuteValue = mapValute.get(selected)
+            result = (userValue * valuteValue).toString()
+            editText.setText (result)
+            
+        }
         if (savedInstanceState != null) { // проверяем запуск данной активности и если это так присваиваем переменным значением
             valuteObj = savedInstanceState.getParcelable("valute")!!
             text.setText(valuteObj.toString())
+            editText.setText(result)
             return
         }
         sendRequest()
@@ -108,43 +122,36 @@ class MainActivity : AppCompatActivity() {
     }
     override fun onSaveInstanceState(outState: Bundle) { // на случай уничтожения активности сохраним ключевую информацию
         super.onSaveInstanceState(outState)
+        outState.putString("result", result)
         outState.putParcelable("valute", valuteObj) // текущий вопрос
     }
     fun setSpinner(){
+        var s : String = " "
         mapValute = mutableOfMap()
         mapValute.put(valuteObj.AUD.Name, valuteObj.AUD.Value)
         mapValute.put(valuteObj.AZN.Name, valuteObj.AZN.Value)
-        mapValute.put(valuteObj.AZN.Name, valuteObj.AZN.Value)
-        mapValute.put(valuteObj.AUD.Name, valuteObj.AUD.Value)
-        mapValute.put(valuteObj.AZN.Name, valuteObj.AZN.Value)
-        mapValute.put(valuteObj.AZN.Name, valuteObj.AZN.Value)
-        //var set : MutableSet <String> = mutableSetOf<String>()
-    //set.add("one")
-    //set.add("two")
-    //var arr = arrayOfNulls<String>(set.size)
-    //var s : String = " "
-    //for( s in set)
-    //arr += s
-    val mainArray : Array<String?> = arrayOf(valuteObj.AUD.Name,
-            valuteObj.AZN.Name,
-            valuteObj.EUR.Name,
-            valuteObj.USD.Name,
-            valuteObj.GBP.Name,
-            valuteObj.BYN.Name,
-            valuteObj.BGN.Name,
-            valuteObj.BRL.Name,
-            valuteObj.HUF.Name,
-            valuteObj.HKD.Name,
-            valuteObj.DKK.Name,
-            valuteObj.INR.Name,
-            valuteObj.KZT.Name,
-            valuteObj.CAD.Name,
-            valuteObj.KGS.Name,
-            valuteObj.CNY.Name,
-            valuteObj.MDL.Name,
-            valuteObj.NOK.Name,
-            valuteObj.PLN.Name)
-        if (mainArray != null) {
+        mapValute.put(valuteObj.EUR.Name, valuteObj.EUR.Value)
+        mapValute.put(valuteObj.USD.Name, valuteObj.USD.Value)
+        mapValute.put(valuteObj.GBP.Name, valuteObj.GBP.Value)
+        mapValute.put(valuteObj.BYN.Name, valuteObj.BYN.Value)
+        mapValute.put(valuteObj.BGN.Name, valuteObj.BGN.Value)
+        mapValute.put(valuteObj.BRL.Name, valuteObj.BRL.Value)
+        mapValute.put(valuteObj.HUF.Name, valuteObj.HUF.Value)
+        mapValute.put(valuteObj.HKD.Name, valuteObj.HKD.Value)
+        mapValute.put(valuteObj.DKK.Name, valuteObj.DKK.Value)
+        mapValute.put(valuteObj.INR.Name, valuteObj.INR.Value)
+        mapValute.put(valuteObj.KZT.Name, valuteObj.KZT.Value)
+        mapValute.put(valuteObj.CAD.Name, valuteObj.CAD.Value)
+        mapValute.put(valuteObj.KGS.Name, valuteObj.KGS.Value)
+        mapValute.put(valuteObj.CNY.Name, valuteObj.CNY.Value)
+        mapValute.put(valuteObj.MDL.Name, valuteObj.MDL.Value)
+        mapValute.put(valuteObj.NOK.Name, valuteObj.NOK.Value)
+        mapValute.put(valuteObj.PLN.Name, valuteObj.PLN.Value)
+         set = mapValute.keys
+        var valuteArray = arrayOfNulls<String>(set.size)
+        for(s in set)
+        valuteArray += s
+        if (valuteArray != null) {
             val adapter: ArrayAdapter<String> = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, mainArray)
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             spinner.setAdapter(adapter)
