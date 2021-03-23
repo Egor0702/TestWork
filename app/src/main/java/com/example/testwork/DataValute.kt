@@ -1,7 +1,9 @@
 package com.example.testwork
 
+import android.content.Context
 import android.os.Parcel
 import android.os.Parcelable
+import android.widget.ArrayAdapter
 import com.google.gson.annotations.SerializedName
 
 data class DataValute (
@@ -188,3 +190,28 @@ data class PLN(
 ){override fun toString() : String{
     return "$Name  :  $Value  ${"\n"}"
 }}
+//class Bund(context: Context, val resource: Int, val list: ArrayList<String>) : ArrayAdapter<String>(context, resource, list), Parcelable {
+//    constructor(parcel: Parcel) : this() {
+//    }
+//
+//    override fun writeToParcel(parcel: Parcel, flags: Int) {
+//
+//    }
+//
+//    override fun describeContents(): Int {
+//        return 0
+//    }
+//
+//    companion object CREATOR : Parcelable.Creator<Bund> {
+//        override fun createFromParcel(parcel: Parcel): Bund {
+//            return Bund(parcel)
+//        }
+//
+//        override fun newArray(size: Int): Array<Bund?> {
+//            return arrayOfNulls(size)
+//        }
+//    }
+
+//}
+//
+//}

@@ -19,6 +19,8 @@ import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity() {
     var result : String = ""
+    var selectedPosition : Int = 0
+    var mark : Boolean = false
     lateinit var text: TextView
     lateinit var valuteObj : Valute
     private val retrofitImpl: RetrofitImpl = RetrofitImpl()
@@ -36,6 +38,18 @@ class MainActivity : AppCompatActivity() {
         spinner = findViewById(R.id.spinner)
         swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout)
 
+        if (savedInstanceState != null) { // проверяем запуск данной активности и если это так присваиваем переменным значением
+            valuteObj = savedInstanceState.getParcelable("valute")!!
+            text.setText(valuteObj.toString())
+            editText.setText(result)
+            selectedPosition = savedInstanceState.getInt("selected")
+            spinner.setSelection(selectedPosition)
+            mark = true
+        }
+
+        if (!mark)
+        sendRequest()
+
         val thred : Thread = Thread() {
             try {
                 TimeUnit.HOURS.sleep(1)
@@ -51,15 +65,28 @@ class MainActivity : AppCompatActivity() {
         swipeRefreshLayout.setColorSchemeResources(
                 android.R.color.black
         )
-        editText.setText("0")
 
-        if (savedInstanceState != null) { // проверяем запуск данной активности и если это так присваиваем переменным значением
-            valuteObj = savedInstanceState.getParcelable("valute")!!
-            text.setText(valuteObj.toString())
-            editText.setText(result)
-            return
+        spinner.onItemSelectedListener = object : OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?,
+                                        itemSelected: View?, selectedItemPosition: Int, selectedId: Long) {
+                var userValue = 0.0
+                try{
+                    userValue = (editText.text.toString()).toDouble()
+                }catch(e:Exception){
+                    Toast.makeText(this@MainActivity,R.string.warning, Toast.LENGTH_LONG).show()
+                }
+                var selected = spinner.getSelectedItem().toString()
+                selectedPosition = spinner.selectedItemPosition
+                var valuteValue = mapValute.get(selected)
+                result = (userValue * valuteValue!!).toString()
+                editText.setText (result)
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
-        sendRequest()
+
+        editText.setText("1")
+        mark = false
     }
 
     private fun sendRequest() {
@@ -111,10 +138,12 @@ class MainActivity : AppCompatActivity() {
             return retroVal.create(ShowValute::class.java)
         }
     }
-    override fun onSaveInstanceState(outState: Bundle) { // на случай уничтожения активности сохраним ключевую информацию
+    override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString("result", result)
-        outState.putParcelable("valute", valuteObj) // текущий вопрос
+        outState.putParcelable("valute", valuteObj)
+        outState.putInt("selected", selectedPosition)
+
     }
     fun setSpinner(){
         var s : String = " "
@@ -149,31 +178,14 @@ class MainActivity : AppCompatActivity() {
                 valuteArray[i] = setValute.elementAt(i)
                 println(valuteArray[i])
             }
-        }
         if (valuteArray != null) {
             val adapter: ArrayAdapter<String> = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, valuteArray)
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             spinner.setAdapter(adapter)
             Log.d("Main", "Выполнено")
+
         }else
             Log.d("Main", "Пустой массив")
 
-        spinner.onItemSelectedListener = object : OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?,
-                                        itemSelected: View?, selectedItemPosition: Int, selectedId: Long) {
-                var userValue = 0.0
-                try{
-                    userValue = (editText.text.toString()).toDouble()
-                }catch(e:Exception){
-                    Toast.makeText(this@MainActivity,R.string.warning, Toast.LENGTH_LONG).show()
-                }
-                var selected = spinner.getSelectedItem().toString()
-                var valuteValue = mapValute.get(selected)
-                result = (userValue * valuteValue!!).toString()
-                editText.setText (result)
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-        }
     }
 }
