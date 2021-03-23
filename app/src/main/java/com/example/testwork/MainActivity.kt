@@ -144,12 +144,10 @@ class MainActivity : AppCompatActivity() {
             Log.d("Main", "Пустая ссылка")
         }
         setValute = mapValute.keys
-        var valuteArray = arrayOfNulls<String>(setValute.size)
-            for (i in 0..setValute.size - 1) {
-                for(s in setValute) {
-                valuteArray[i] = s
+        var valuteArray = arrayOfNulls<String>(setValute.size) 
+                for (i in 0..setValute.size - 1) {
+                valuteArray[i] = setValute.elementAt(i)
                 println(valuteArray[i])
-                break
             }
         }
         if (valuteArray != null) {
